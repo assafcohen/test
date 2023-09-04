@@ -4,13 +4,9 @@
 
 using asio::ip::tcp;
 
-enum
-{
-    maxLength = 1024
-};
-
 int main(int, char*[]) noexcept
 {
+    constexpr std::size_t maxLength = 1024;
     try
     {
         asio::io_context ioContext;
@@ -20,9 +16,9 @@ int main(int, char*[]) noexcept
         asio::connect(s, resolver.resolve("127.0.0.1", "61434"));
 
         std::cout << "Enter message: ";
-        char request[maxLength];
-        std::cin.getline(request, maxLength);
-        size_t requestLength = std::strlen(request);
+        char request[maxLength]{};
+        std::cin.getline(request, maxLength-1);
+        size_t requestLength = strnlen_s(request,maxLength);
         asio::write(s, asio::buffer(request, requestLength));
         char l = 0;
         asio::read(s, asio::buffer(&l, 1));
