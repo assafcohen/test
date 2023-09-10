@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    asio::io_context ioContext(21);
+    asio::io_context ioContext;
     Server s(ioContext, std::stoul(argv[1]));
     ioContext.run();
     return 0;
