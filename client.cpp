@@ -13,18 +13,24 @@ int main(int, char*[]) noexcept
 
         tcp::socket s(ioContext);
         tcp::resolver resolver(ioContext);
-        asio::connect(s, resolver.resolve("127.0.0.1", "61434"));
-
-        std::cout << "Enter message: ";
+        asio::connect(s, resolver.resolve("127.0.0.1", "5555"));
         char request[maxLength]{};
-        std::cin.getline(request, maxLength-1);
-        size_t requestLength = strnlen_s(request,maxLength);
-        asio::write(s, asio::buffer(request, requestLength));
-        char l = 0;
-        asio::read(s, asio::buffer(&l, 1));
-        char reply[maxLength];
-        size_t replyLength = asio::read(s, asio::buffer(reply, l));
-        std::cout << "Reply is: " << std::string_view(reply, replyLength) << "\n";
+        while(true) {
+            std::cout << "Enter message: ";
+            std::cin.getline(request, maxLength - 1);
+            size_t requestLength = strnlen_s(request, maxLength);
+            if(std::string_view(request,requestLength).starts_with("QUIT"))
+            {
+                break;
+            }
+
+            asio::write(s, asio::buffer(request, requestLength));
+            char l = 0;
+            asio::read(s, asio::buffer(&l, 1));
+            char reply[maxLength];
+            size_t replyLength = asio::read(s, asio::buffer(reply, l));
+            std::cout << "Reply is: " << std::string_view(reply, replyLength) << "\n";
+        }
     }
     catch (std::exception& e)
     {
