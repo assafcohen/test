@@ -18,7 +18,7 @@ int main(int, char*[]) noexcept
         while(true) {
             std::cout << "Enter message: ";
             std::cin.getline(request, maxLength - 1);
-            size_t requestLength = strnlen_s(request, maxLength);
+            size_t requestLength = strnlen(request, maxLength);
             if(std::string_view(request,requestLength).starts_with("QUIT"))
             {
                 break;
